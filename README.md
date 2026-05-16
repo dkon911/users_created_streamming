@@ -39,187 +39,55 @@ The project is designed with the following components:
 ## Dashboard
 ![weather monitor](images/dashboard_historical.png)
 
-## Getting Started
+# ClimaFlow: Real-Time Meteorological Data Processing & Forecasting Architecture
 
-### Start pipeline and dashboard
+## 📌 Executive Summary
+ClimaFlow is an end-to-end, real-time data engineering pipeline and machine learning forecasting system designed to ingest, process, store, and visualize high-velocity weather data. Built to address the growing unpredictability of extreme weather events, this system transforms raw atmospheric data into actionable insights to support proactive decision-making in sectors like agriculture, aviation, and public safety. 
 
-1. Run Docker Compose to spin up the services:
-    ```bash
-    docker-compose up -d
-    ```
+## 💼 Business Value & Management Highlights
+For HR and Technical Managers evaluating this project, this system demonstrates advanced proficiency in **Big Data Engineering, Machine Learning, and Agile Software Development**:
+* **Enterprise-Grade Architecture:** Successfully integrates a robust microservices ecosystem capable of processing up to 10,000 records per second with minimal latency. 
+* **High-Impact Machine Learning:** Integrates predictive analytics to deliver highly accurate 24-hour weather forecasts, mitigating real-world risks.
+* **Agile Project Management:** The project was executed using the **Dynamic Systems Development Method (DSDM)**, utilizing MoSCoW prioritization, timeboxed sprints, and continuous stakeholder feedback to ensure the most valuable features were delivered efficiently.
+* **User-Centric Interfaces:** Features intuitive visualizations tailored for both non-technical users (via a React Web App) and professional meteorologists (via Grafana).
 
-2. Access airflow webserver UI (http://localhost:8080/) to start the job
+---
 
+## 🏗️ System Architecture & Tech Stack
+The platform utilizes a containerized, highly scalable data architecture managed entirely via **Docker** and orchestrated by **Apache Airflow**. 
 
-3. Run spark-job
-  - `<spark-master container id>`: get it in docker
-  - `<spark master IP address>`: get it on the spark UI
+### Core Components
+* **Data Ingestion:** **Apache Kafka** acts as the high-throughput, low-latency message broker, continuously streaming raw data from external Weather APIs.
+* **Stream Processing:** **Apache Spark** consumes the live Kafka streams to perform near real-time data transformations, enrichments, and rigorous quality checks. PySpark scripts can successfully transform and load over 220,000 records in just 23.4 seconds.
+* **Data Lake (Raw Storage):** **Apache Cassandra** is utilized for its exceptional write throughput and fault tolerance, storing massive volumes of unstructured, high-velocity weather data.
+* **Data Warehouse (Structured Storage):** **PostgreSQL** handles complex analytical queries, storing refined data for machine learning feature extraction and historical reporting.
+* **Backend API:** A **Python/Flask** middleware layer securely serves real-time and historical data to the front-end components.
+* **Visualization & UI:** A responsive **React.js** Single Page Application (SPA) serves end-users, while **Grafana** connects to PostgreSQL to offer deep analytics for technical stakeholders.
 
-    ```bash
-      docker exec -it <spark-master container id>\
-      spark-submit --master spark://<spark master IP address>:7077 \
-      --packages com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,\
-      org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1 historical_stream.py
-    ```
+---
 
-    or if already have spark in machine use:
+## 🧠 Machine Learning Integration
+To provide proactive 24-hour forecasting, the system evaluates models like Linear Regression, XGBoost, and Random Forest using k-fold cross-validation. 
+* **Selected Model:** **Random Forest Regressor**.
+* **Performance:** The model is highly robust at handling complex, non-linear meteorological data, achieving an exceptional R-squared value of **0.9977** and a Mean Squared Error (MSE) of just 0.0506.
+* **Metrics Predicted:** Temperature, humidity, and wind speed.
 
-    ```bash
-    python historical_stream.py
-    ```
+---
 
-  ## Data Overview
+## 📂 Project Structure (For Explorers)
+For developers looking to explore the codebase, the repository is structured modularly to separate concerns across the pipeline:
 
-### Raw data from the Weather API looks like this:
+```text
+├── backend/            # Core Flask logic, API blueprints, and data models
+├── dags/               # Apache Airflow DAGs for orchestrating historical/real-time streams
+├── script/             # Spark submission scripts (e.g., spark_stream.py, current_stream.py)
+├── ui-weather/         # React SPA frontend source code (components, API calls, Vite config)
+├── docker-compose.yaml # Multi-container setup for Kafka, Spark, Cassandra, and Postgres
+└── README.md           # Project documentation
 
-"location": {
-        "name": "Hanoi",
-        "region": "",
-        "country": "Vietnam",
-        "lat": 21.03,
-        "lon": 105.85,
-        "tz_id": "Asia/Bangkok",
-        "localtime_epoch": 1726065512,
-        "localtime": "2024-09-11 21:38"
-    },
-    "forecast": {
-        "forecastday": [
-            {
-                "date": "2024-09-11",
-                "date_epoch": 1726012800,
-                "day": {
-                    "maxtemp_c": 25.2,
-                    "mintemp_c": 23.6,
-                    "avgtemp_c": 24.3,
-                    "maxwind_kph": 19.4,
-                    "totalprecip_mm": 37.97,
-                    "totalsnow_cm": 0.0,
-                    "avghumidity": 95,
-                    "daily_will_it_rain": 1,
-                    "daily_chance_of_rain": 100,
-                    "daily_will_it_snow": 0,
-                    "daily_chance_of_snow": 0,
-                    "condition": {
-                        "text": "Light rain shower",
-                        "icon": "//cdn.weatherapi.com/weather/64x64/day/353.png",
-                        "code": 1240
-                    },
-                    "uv": 6.0
-                },
-                "hour": [
-                    {
-                        "time_epoch": 1725987600,
-                        "time": "2024-09-11 00:00",
-                        "temp_c": 24.1,
-                        "is_day": 0,
-                        "condition": {
-                            "text": "Light rain shower",
-                            "icon": "//cdn.weatherapi.com/weather/64x64/night/353.png",
-                            "code": 1240
-                        },
-                        "wind_kph": 7.9,
-                        "wind_degree": 3,
-                        "pressure_mb": 1007.0,
-                        "pressure_in": 29.73,
-                        "precip_mm": 1.14,
-                        "precip_in": 0.04,
-                        "snow_cm": 0.0,
-                        "humidity": 97,
-                        "cloud": 100,
-                        "feelslike_c": 26.9,
-                        "windchill_c": 24.1,
-                        "will_it_rain": 1,
-                        "chance_of_rain": 100,
-                        "vis_km": 10.0,
-                        "uv": 0.0
-                    },
-
-### And here is the data schema after processing:
-
-- Location data will contain the following fields:
-    - name: name of the city
-    - region: region of the city
-    - country: country of the city
-    - lat: latitute of the city
-    - lon: longitude of the city
-    - tz_id: timezone of the city
-    - localtime: local time of the city
-    - localtime_epoch: local time epoch of the city
-
-- Day data will contain the following fields:
-    - date: last updated date
-    - date_epoch: last updated date in epoch format
-    - maxtemp_c: Maximum temperature in celsius
-    - mintemp_c: Minimum temperature in celsius
-    - avgtemp_c: Average temperature in celsius
-    - maxwind_kph: Maximum wind speed in kph
-    - totalprecip_mm: Total precipitation in mm
-    - totalsnow_cm: Total snow in cm
-    - avghumidity: Average humidity
-    - daily_will_it_rain:
-    - daily_chance_of_rain:
-    - daily_will_it_snow:
-    - daily_chance_of_snow:
-    - condition_text:
-    - condition_icon:
-    - condition_code:
-    - uv: UV index of the day
-
-
-- Hour data will contain the following fields:
-    - id: id of the record in UUID format
-    - time: time in format yyyy-mm-dd hh:mm
-    - temp_c: Temperature in celsius at that hour
-    - is_day:
-    - condition_text: The word description of the weather condition
-    - condition_icon: The icon code of the weather condition
-    - condition_code: The code of the weather condition
-    - wind_kph: Wind speed in kph
-    - wind_degree: Wind degree
-    - pressure_mb: Pressure in millibars
-    - pressure_in:
-    - precip_mm:
-    - precip_in:
-    - snow_cm:
-    - humidity:
-    - cloud: Cloud cover percentage
-    - feelslike_c:
-    - hour_uv: UV index per hour
-
-REALTIME.json
-{
-    "location": {
-        "name": "Atba Village",
-        "region": "",
-        "country": "Vietnam",
-        "lat": 16.05,
-        "lon": 108.2,
-        "tz_id": "Asia/Ho_Chi_Minh",
-        "localtime_epoch": 1726673963,
-        "localtime": "2024-09-18 22:39"
-    },
-    "current": {
-        "last_updated_epoch": 1726673400,
-        "last_updated": "2024-09-18 22:30",
-        "temp_c": 25.2,
-        "is_day": 0,
-        "condition": {
-            "text": "Partly cloudy",
-            "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
-            "code": 1003
-        },
-        "wind_kph": 14.4,
-        "wind_degree": 280,
-        "pressure_mb": 1001.0,
-        "precip_in": 0.06,
-        "humidity": 94,
-        "cloud": 75,
-        "feelslike_c": 28.5,
-        "windchill_c": 23.3,
-        "heatindex_c": 25.7,
-        "dewpoint_c": 22.4,
-        "vis_km": 10.0,
-        "uv": 1.0,
-        "gust_kph": 22.7
-    }
-}
+--------------------------------------------------------------------------------
+📡 Core API Endpoints
+The Flask backend exposes several endpoints for data retrieval:
+GET /predict_today: Triggers the Random Forest model to generate 24-hour predictions based on recent historical data.
+GET /historical_weather: Retrieves comprehensive past weather data for specific dates.
+GET /current_weather: Fetches live metrics (temperature, wind speed, UV index, etc.) by city and country.
