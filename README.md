@@ -10,8 +10,7 @@
 
 ## Introduction
 
-This project is about building an near real-time data pipeline. This project is focused on developing an application that can perform real-time analysis of the weather conditions
-## System Architecture
+This project is about building an end-to-end near real-time data engineering pipeline and machine learning forecasting system designed to ingest, process, store, and visualize high-velocity weather data. Built to address the growing unpredictability of extreme weather events, this system transforms raw atmospheric data into actionable insights to support proactive decision-making in sectors like agriculture, aviation, and public safety. 
 
 ![System Architecture](images/system_architecture.jpg)
 
@@ -39,30 +38,13 @@ The project is designed with the following components:
 ## Dashboard
 ![weather monitor](images/dashboard_historical.png)
 
-# ClimaFlow: Real-Time Meteorological Data Processing & Forecasting Architecture
-
-## 📌 Executive Summary
-ClimaFlow is an end-to-end, real-time data engineering pipeline and machine learning forecasting system designed to ingest, process, store, and visualize high-velocity weather data. Built to address the growing unpredictability of extreme weather events, this system transforms raw atmospheric data into actionable insights to support proactive decision-making in sectors like agriculture, aviation, and public safety. 
 
 ## 💼 Business Value & Management Highlights
-For HR and Technical Managers evaluating this project, this system demonstrates advanced proficiency in **Big Data Engineering, Machine Learning, and Agile Software Development**:
+This system demonstrates advanced proficiency in **Big Data Engineering, Machine Learning, and Agile Software Development**:
 * **Enterprise-Grade Architecture:** Successfully integrates a robust microservices ecosystem capable of processing up to 10,000 records per second with minimal latency. 
 * **High-Impact Machine Learning:** Integrates predictive analytics to deliver highly accurate 24-hour weather forecasts, mitigating real-world risks.
 * **Agile Project Management:** The project was executed using the **Dynamic Systems Development Method (DSDM)**, utilizing MoSCoW prioritization, timeboxed sprints, and continuous stakeholder feedback to ensure the most valuable features were delivered efficiently.
 * **User-Centric Interfaces:** Features intuitive visualizations tailored for both non-technical users (via a React Web App) and professional meteorologists (via Grafana).
-
----
-
-## 🏗️ System Architecture & Tech Stack
-The platform utilizes a containerized, highly scalable data architecture managed entirely via **Docker** and orchestrated by **Apache Airflow**. 
-
-### Core Components
-* **Data Ingestion:** **Apache Kafka** acts as the high-throughput, low-latency message broker, continuously streaming raw data from external Weather APIs.
-* **Stream Processing:** **Apache Spark** consumes the live Kafka streams to perform near real-time data transformations, enrichments, and rigorous quality checks. PySpark scripts can successfully transform and load over 220,000 records in just 23.4 seconds.
-* **Data Lake (Raw Storage):** **Apache Cassandra** is utilized for its exceptional write throughput and fault tolerance, storing massive volumes of unstructured, high-velocity weather data.
-* **Data Warehouse (Structured Storage):** **PostgreSQL** handles complex analytical queries, storing refined data for machine learning feature extraction and historical reporting.
-* **Backend API:** A **Python/Flask** middleware layer securely serves real-time and historical data to the front-end components.
-* **Visualization & UI:** A responsive **React.js** Single Page Application (SPA) serves end-users, while **Grafana** connects to PostgreSQL to offer deep analytics for technical stakeholders.
 
 ---
 
